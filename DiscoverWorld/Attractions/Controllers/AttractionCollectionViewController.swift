@@ -26,7 +26,7 @@ final class AttractionCollectionViewController: UICollectionViewController {
     
     private var visualEffectsView: UIVisualEffectView!
     
-    private lazy var cardViewController: CardViewController = .init(attraction: attractions[0], imageLoader: imageLoader)
+    private lazy var cardViewController: CardViewController = .init(attraction: attractions[0], imageLoader: imageLoader, delegate: self)
     
     private var runningAnimations = [UIViewPropertyAnimator]()
     
@@ -91,30 +91,10 @@ final class AttractionCollectionViewController: UICollectionViewController {
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         
-        cardViewController.view.frame = CGRect(x: 0, y: view.frame.height - cardHandleArea, width: view.bounds.width, height: cardHeight)
+        cardViewController.view.frame = CGRect(x: 0, y: view.frame.height, width: view.bounds.width, height: cardHeight)
         cardViewController.view.clipsToBounds = true
         
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleCardPan(panGestureRecognizer:)))
-        
-        cardViewController.handleAreaView.addGestureRecognizer(panGesture)
-    }
-    
-    @objc private func handleCardPan(panGestureRecognizer: UIPanGestureRecognizer) {
-        switch panGestureRecognizer.state {
-        case .began:
-            startIntractiveTransition(state: nextState, duration: 1.0)
-        case .changed:
-            let translation = panGestureRecognizer.translation(in: cardViewController.handleAreaView)
-            
-            var fractionComplete = translation.y / cardHeight
-            
-            fractionComplete = isCardVisible ? fractionComplete : -fractionComplete
-            updateInteractiveTransition(fractionCompleted: fractionComplete)
-        case .ended:
-            continueInteractionTransition()
-        default:
-            break
-        }
+        animateTransitionIfNeeded(state: nextState, duration: 1.0)
     }
     
     private func animateTransitionIfNeeded(state: CardState, duration: TimeInterval) {
@@ -124,7 +104,7 @@ final class AttractionCollectionViewController: UICollectionViewController {
             case .expanded:
                 self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
             case .collapsed:
-                self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHandleArea
+                self.cardViewController.view.frame.origin.y = self.view.frame.height
             }
         }
         frameAnimator.addCompletion { _ in
@@ -180,5 +160,24 @@ final class AttractionCollectionViewController: UICollectionViewController {
        for animator in runningAnimations {
         animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
         }
+    }
+}
+
+extension AttractionCollectionViewController: CardViewControllerDelegate {
+    
+    func panGestureDidBegin(_ cardViewController: CardViewController) {
+        startIntractiveTransition(state: nextState, duration: 1.0)
+    }
+    
+    func panGestureDidChange(_ cardViewController: CardViewController, with translation: CGPoint) {
+        var fractionComplete = translation.y / cardHeight
+        
+        fractionComplete = isCardVisible ? fractionComplete : -fractionComplete
+        updateInteractiveTransition(fractionCompleted: fractionComplete)
+    }
+    
+    func panGestureDidEnd(_ cardViewController: CardViewController) {
+        continueInteractionTransition()
+        visualEffectsView.isHidden = true
     }
 }
