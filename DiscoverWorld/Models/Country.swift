@@ -21,7 +21,4 @@ struct Country: Codable {
     let population: Int
     
     let attractions: [Attraction]
-    
 }
-
-

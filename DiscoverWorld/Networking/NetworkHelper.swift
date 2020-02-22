@@ -11,7 +11,7 @@ import Foundation
 /// Manages networking tasks
 final class NetworkHelper {
     
-    typealias Handle = (Result<Data,AppError>) -> Void
+    typealias Handle = (Result<Data, AppError>) -> Void
     
     /// Performs the dataTask
     /// - Parameters:
