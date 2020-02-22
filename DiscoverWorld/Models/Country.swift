@@ -20,5 +20,9 @@ struct Country: Codable {
     /// The country's population.
     let population: Int
     
+    /// The URLString of the country's flag
+    let flagURL: String
+    
+    /// The attraction a country has.
     let attractions: [Attraction]
 }
