@@ -8,9 +8,19 @@
 
 import Foundation
 
+/// Represents a country.
 struct Country: Codable {
+    
+    /// The country's id.
     let id: String
+    
+    /// The name of the country.
     let name: String
+    
+    /// The country's population.
+    let population: Int
+    
+    let attractions: [Attraction]
     
 }
 
