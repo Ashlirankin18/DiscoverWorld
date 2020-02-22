@@ -22,22 +22,25 @@ final class NetworkHelper {
             completionHandler(.failure(.badURL("Unsupported URL")))
             return
         }
-        let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+        DispatchQueue.main.async {
             
-            if let error = error {
-                completionHandler(.failure(.networkError(error)))
+            let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                
+                if let error = error {
+                    completionHandler(.failure(.networkError(error)))
+                }
+                guard let httpResponse = response as? HTTPURLResponse,
+                    (200...299).contains(httpResponse.statusCode)
+                    else {
+                        let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -999
+                        completionHandler(.failure(.badStatusCode(statusCode.description)))
+                        return
+                }
+                if let data = data {
+                    completionHandler(.success(data))
+                }
             }
-            guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode)
-                else {
-                    let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -999
-                    completionHandler(.failure(.badStatusCode(statusCode.description)))
-                    return
-            }
-            if let data = data {
-                completionHandler(.success(data))
-            }
+             dataTask.resume()
         }
-        dataTask.resume()
     }
 }
