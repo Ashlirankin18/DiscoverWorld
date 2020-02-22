@@ -17,9 +17,12 @@
 		2EAFEE8F2401AA1C00AA90B1 /* Attraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAFEE8E2401AA1C00AA90B1 /* Attraction.swift */; };
 		2EAFEE922401CE9500AA90B1 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAFEE912401CE9500AA90B1 /* NetworkHelper.swift */; };
 		2EAFEE942401D08200AA90B1 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAFEE932401D08200AA90B1 /* AppError.swift */; };
+		B76755CCE9CD1BDA4B36753C /* Pods_DiscoverWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC30835A4E5357AA0AD8C1D /* Pods_DiscoverWorld.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		287578DDA21467A0FDAE16A0 /* Pods-DiscoverWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverWorld.release.xcconfig"; path = "Target Support Files/Pods-DiscoverWorld/Pods-DiscoverWorld.release.xcconfig"; sourceTree = "<group>"; };
+		2DC30835A4E5357AA0AD8C1D /* Pods_DiscoverWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DiscoverWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EAFEE712401A7C400AA90B1 /* DiscoverWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiscoverWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EAFEE742401A7C400AA90B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2EAFEE762401A7C400AA90B1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +35,7 @@
 		2EAFEE8E2401AA1C00AA90B1 /* Attraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attraction.swift; sourceTree = "<group>"; };
 		2EAFEE912401CE9500AA90B1 /* NetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		2EAFEE932401D08200AA90B1 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		9E2CFAE278FD99AF9530367A /* Pods-DiscoverWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverWorld.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverWorld/Pods-DiscoverWorld.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B76755CCE9CD1BDA4B36753C /* Pods_DiscoverWorld.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +55,8 @@
 			children = (
 				2EAFEE732401A7C400AA90B1 /* DiscoverWorld */,
 				2EAFEE722401A7C400AA90B1 /* Products */,
+				3EC68D28BA87765BB648DA79 /* Pods */,
+				52F6FFFD0DE56F0BE45D6B49 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +126,23 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
+		3EC68D28BA87765BB648DA79 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9E2CFAE278FD99AF9530367A /* Pods-DiscoverWorld.debug.xcconfig */,
+				287578DDA21467A0FDAE16A0 /* Pods-DiscoverWorld.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		52F6FFFD0DE56F0BE45D6B49 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2DC30835A4E5357AA0AD8C1D /* Pods_DiscoverWorld.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -126,9 +150,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2EAFEE852401A7C500AA90B1 /* Build configuration list for PBXNativeTarget "DiscoverWorld" */;
 			buildPhases = (
+				D9E6B23CB81C60E6036875FE /* [CP] Check Pods Manifest.lock */,
 				2EAFEE6D2401A7C400AA90B1 /* Sources */,
 				2EAFEE6E2401A7C400AA90B1 /* Frameworks */,
 				2EAFEE6F2401A7C400AA90B1 /* Resources */,
+				2EAFEE962401DE7500AA90B1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -184,6 +210,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2EAFEE962401DE7500AA90B1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
+		};
+		D9E6B23CB81C60E6036875FE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DiscoverWorld-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2EAFEE6D2401A7C400AA90B1 /* Sources */ = {
@@ -338,6 +406,7 @@
 		};
 		2EAFEE862401A7C500AA90B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E2CFAE278FD99AF9530367A /* Pods-DiscoverWorld.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -356,6 +425,7 @@
 		};
 		2EAFEE872401A7C500AA90B1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 287578DDA21467A0FDAE16A0 /* Pods-DiscoverWorld.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
