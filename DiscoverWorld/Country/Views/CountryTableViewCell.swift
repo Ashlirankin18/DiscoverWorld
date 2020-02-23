@@ -10,7 +10,6 @@ import UIKit
 
 /// `UITableViewCell` subclass which displays a country.
 final class CountryTableViewCell: UITableViewCell {
-    
     /// Contains data needed to configure the `CountryTableViewCell`.
     struct ViewModel {
         
@@ -24,17 +23,25 @@ final class CountryTableViewCell: UITableViewCell {
         let flag: UIImage
     }
     
+    private lazy var numberFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.usesGroupingSeparator = true
+        numberFormatter.groupingSeparator = ","
+        numberFormatter.numberStyle = .decimal
+        return numberFormatter
+    }()
+    
     /// Single point of configuration of the cell.
     var viewModel: ViewModel? {
         didSet {
-            
             guard let viewModel = viewModel else {
                 assertionFailure("Could not find ViewModel")
                 return
             }
+            
             flagImageView.image = viewModel.flag
             countryNameLabel.text = viewModel.name
-            populationLabel.text = String(viewModel.population)
+            populationLabel.text = numberFormatter.string(from: NSNumber(value: viewModel.population))
         }
     }
     
