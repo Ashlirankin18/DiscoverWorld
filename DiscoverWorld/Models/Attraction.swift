@@ -23,11 +23,15 @@ struct Attraction: Codable {
     /// The description of the attraction.
     let description: String
     
+    /// The attraction's image.
+    let image: String
+    
     private enum CodingKeys: String, CodingKey {
         case id
         case countryId = "CountryId"
         case name
         case description
+        case image
     }
 }
  
