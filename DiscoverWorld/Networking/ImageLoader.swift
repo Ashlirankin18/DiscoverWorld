@@ -8,15 +8,21 @@
 
 import UIKit
 
-class ImageLoader {
+/// Handles thre logic related to loading images.
+final class ImageLoader {
     
-    let networkHelper: NetworkHelper
+    private let networkHelper: NetworkHelper
+    
     typealias ImageHandler = (Result<UIImage, AppError>) -> Void
     
     init(networkHelper: NetworkHelper) {
         self.networkHelper = networkHelper
     }
     
+    /// Retrives an image from a urlString.
+    /// - Parameters:
+    ///   - urlString: URL String representation of the image
+    ///   - completionHandler: Handles the result of asynchronous call.
     func retrieveImage(urlString: String, completionHandler: @escaping ImageHandler) {
         networkHelper.performDataTask(urlEndPoint: urlString) { (result) in
             switch result {
