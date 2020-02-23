@@ -34,7 +34,6 @@ final class CountryViewController: UIViewController {
     
     private func configureTableView() {
         countryTableView.register(UINib(nibName: "CountryTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "CountryTableViewCell")
-        countryTableView.rowHeight = UITableView.automaticDimension
         countryTableView.dataSource = self
         countryTableView.delegate = self
     }
@@ -73,9 +72,9 @@ extension CountryViewController: UITableViewDataSource {
         imageLoader.retrieveImage(urlString: country.flagURL) { (result) in
             switch result {
             case let .success(image):
-            cell.viewModel = CountryTableViewCell.ViewModel(name: country.name, population: country.population, flag: image)
+                cell.viewModel = CountryTableViewCell.ViewModel(name: country.name, population: country.population, flag: image)
             case let .failure(error):
-            print(error)
+                print(error)
             }
         }
         return cell
@@ -87,5 +86,11 @@ extension CountryViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let attractions = countries[indexPath.row].attractions
+        let destinationController = AttractionCollectionViewController(attractions: attractions, imageLoader: imageLoader)
+        show(destinationController, sender: self)
     }
 }
