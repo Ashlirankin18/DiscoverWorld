@@ -24,19 +24,20 @@ final class ImageLoader {
     ///   - urlString: URL String representation of the image
     ///   - completionHandler: Handles the result of asynchronous call.
     func retrieveImage(urlString: String, completionHandler: @escaping ImageHandler) {
-        networkHelper.performDataTask(urlEndPoint: urlString) { (result) in
-            switch result {
-            case let .success(data):
+            networkHelper.performDataTask(urlEndPoint: urlString) { (result) in
                 DispatchQueue.main.async {
+                switch result {
+                case let .success(data):
+                    
                     if let image = UIImage(data: data) {
                         completionHandler(.success(image))
                     } else {
                         completionHandler(.failure(.imageDecodingError("Could not retrieve image from data")))
                     }
+                    
+                case let .failure(error):
+                    completionHandler(.failure(.noImageFound(error)))
                 }
-                
-            case let .failure(error):
-                completionHandler(.failure(.noImageFound(error)))
             }
         }
     }
