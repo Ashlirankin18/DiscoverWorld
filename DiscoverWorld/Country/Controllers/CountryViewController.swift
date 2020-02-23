@@ -30,6 +30,8 @@ final class CountryViewController: UIViewController {
         retrieveCountries()
     }
     
+    // MARK: - CountryViewController
+    
     private func configureTableView() {
         countryTableView.register(UINib(nibName: "CountryTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "CountryTableViewCell")
         countryTableView.rowHeight = UITableView.automaticDimension
@@ -57,6 +59,8 @@ final class CountryViewController: UIViewController {
 }
 extension CountryViewController: UITableViewDataSource {
     
+    // MARK: - UITableViewDataSource
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         countries.count
     }
@@ -78,6 +82,9 @@ extension CountryViewController: UITableViewDataSource {
     }
 }
 extension CountryViewController: UITableViewDelegate {
+    
+    // MARK: - UITableViewDelegate
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
