@@ -22,7 +22,6 @@ final class AttractionCollectionViewCell: UICollectionViewCell {
         
         /// The description of the attraction.
         let description: String
-        
     }
     
     /// Single point of configuration of the `AttractionCollectionViewCell`.
@@ -30,12 +29,15 @@ final class AttractionCollectionViewCell: UICollectionViewCell {
         didSet {
             attractionImageView.image = viewModel?.image
             attractionNameLabel.text = viewModel?.name
-            attractinDescriptionLabel.text = viewModel?.description
+            
+            layer.borderWidth = 2.5
+            layer.borderColor = UIColor.black.cgColor
+            cellBackgroundView.layer.borderWidth = 2.0
+            cellBackgroundView.layer.borderColor = UIColor.black.cgColor
         }
     }
     
     @IBOutlet private weak var cellBackgroundView: UIView!
     @IBOutlet private weak var attractionImageView: UIImageView!
     @IBOutlet private weak var attractionNameLabel: UILabel!
-    @IBOutlet private weak var attractinDescriptionLabel: UILabel!
 }
