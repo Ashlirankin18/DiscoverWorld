@@ -39,7 +39,42 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37g-Q9-AsU">
                     <rect key="frame" x="0.0" y="44" width="375" height="446"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="39" translatesAutoresizingMaskIntoConstraints="NO" id="7EO-wB-lLb">
+                            <rect key="frame" x="0.0" y="10" width="375" height="426"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="og3-nn-xd6">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="128" id="gRc-zI-H9N"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ta7-HP-Nka">
+                                    <rect key="frame" x="0.0" y="167" width="375" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KcH-1H-zqB">
+                                    <rect key="frame" x="0.0" y="226.5" width="375" height="199.5"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                    <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                </textView>
+                            </subviews>
+                        </stackView>
+                    </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="7EO-wB-lLb" secondAttribute="bottom" constant="10" id="7Od-vt-Bsv"/>
+                        <constraint firstItem="7EO-wB-lLb" firstAttribute="top" secondItem="37g-Q9-AsU" secondAttribute="top" constant="10" id="9c2-Ab-Z4m"/>
+                        <constraint firstItem="7EO-wB-lLb" firstAttribute="centerY" secondItem="37g-Q9-AsU" secondAttribute="centerY" id="D2Q-vM-LXj"/>
+                        <constraint firstAttribute="trailing" secondItem="7EO-wB-lLb" secondAttribute="trailing" id="GyY-q6-eNZ"/>
+                        <constraint firstItem="7EO-wB-lLb" firstAttribute="centerX" secondItem="37g-Q9-AsU" secondAttribute="centerX" id="gcn-QH-Zbc"/>
+                        <constraint firstItem="7EO-wB-lLb" firstAttribute="leading" secondItem="37g-Q9-AsU" secondAttribute="leading" id="k8O-mp-7nU"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
