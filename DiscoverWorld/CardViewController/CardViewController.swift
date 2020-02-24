@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// `UIViewController` subclass which displays details about an attraction.
 final class CardViewController: UIViewController {
   
     @IBOutlet weak var handleAreaView: UIView!
@@ -26,13 +27,8 @@ final class CardViewController: UIViewController {
         self.imageLoader = imageLoader
         super.init(nibName: "CardViewController", bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - UIViewControlller
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
 }
