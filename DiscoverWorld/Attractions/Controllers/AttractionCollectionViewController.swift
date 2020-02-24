@@ -83,7 +83,6 @@ final class AttractionCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let attraction = attractions[indexPath.row]
         
         visualEffectsView = UIVisualEffectView()
         visualEffectsView.frame = view.frame
