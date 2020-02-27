@@ -95,7 +95,7 @@ final class AttractionCollectionViewController: UICollectionViewController {
             let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
                 switch state {
                 case .expanded:
-                    self.cardViewController.view.layer.cornerRadius = 12.0
+                    self.cardViewController.view.layer.cornerRadius = 10.0
                 case .collapsed:
                     self.cardViewController.view.layer.cornerRadius = 0
                 }
@@ -196,4 +196,3 @@ extension AttractionCollectionViewController: CardViewControllerDelegate {
         visualEffectsView.isHidden = true
     }
 }
-
