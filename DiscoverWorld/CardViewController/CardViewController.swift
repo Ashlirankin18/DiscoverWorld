@@ -31,10 +31,10 @@ final class CardViewController: UIViewController {
     
     struct ViewModel {
         
-        /// The name  of the attraction.
+        /// The name of the attraction.
         let name: String
         
-        /// The attraction's adescription.
+        /// The attraction's description.
         let description: String
         
         /// The  attractions image
@@ -60,12 +60,12 @@ final class CardViewController: UIViewController {
             guard let viewModel = viewModel else {
                 return
             }
+            attractionImageView.layer.cornerRadius = 5.0
             attractionImageView.image = viewModel.image
             attractionNameLabel.text = viewModel.name
             attractionDescriptionTextView.text = viewModel.description
         }
     }
-    
     
     // MARK: - CardViewController
     
@@ -82,6 +82,7 @@ final class CardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         handleAreaView.addGestureRecognizer(panGestureRecognizer)
