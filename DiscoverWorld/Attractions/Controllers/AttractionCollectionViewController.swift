@@ -40,6 +40,10 @@ final class AttractionCollectionViewController: UICollectionViewController {
     
     @IBOutlet private weak var flowLayout: UICollectionViewFlowLayout!
     
+    /// Creates a new instance of `AttractionCollectionViewContoroller`
+    /// - Parameters:
+    ///   - attractions: The attractions that a country has.
+    ///   - imageLoader: Responsible for retrieving images.
     init(attractions: [Attraction], imageLoader: ImageLoader) {
         self.attractions = attractions
         self.imageLoader = imageLoader
@@ -59,6 +63,7 @@ final class AttractionCollectionViewController: UICollectionViewController {
     private func configureCollectionView() {
         collectionView.register(UINib(nibName: "AttractionCollectionViewCell", bundle: Bundle.main), forCellWithReuseIdentifier: "AttractionCollectionViewCell")
     }
+    
     private func retrieveImage(urlString: String, completion: @escaping (UIImage) -> Void) {
         imageLoader.retrieveImage(urlString: urlString) { (result) in
             switch result {
@@ -68,42 +73,6 @@ final class AttractionCollectionViewController: UICollectionViewController {
                 completion(image)
             }
         }
-    }
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return attractions.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttractionCollectionViewCell", for: indexPath) as? AttractionCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        let attraction = attractions[indexPath.row]
-        
-        retrieveImage(urlString: attraction.image) { (image) in
-            cell.viewModel = AttractionCollectionViewCell.ViewModel(name: attraction.name, image: image, description: attraction.description)
-        }
-        
-        return cell
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedAttraction = attractions[indexPath.row]
-        
-        retrieveImage(urlString: selectedAttraction.image) { [weak self] (image) in
-            self?.cardViewController.viewModel = CardViewController.ViewModel(name: selectedAttraction.name, description: selectedAttraction.description, image: image)
-        }
-        
-        visualEffectsView = UIVisualEffectView()
-        visualEffectsView.frame = view.frame
-        view.addSubview(visualEffectsView)
-        
-        addChild(cardViewController)
-        view.addSubview(cardViewController.view)
-        
-        cardViewController.view.frame = CGRect(x: 0, y: view.frame.height, width: view.bounds.width, height: cardHeight)
-        cardViewController.view.clipsToBounds = true
-        
-        animateTransitionIfNeeded(state: nextState, duration: 1.0)
     }
     
     private func animateTransitionIfNeeded(state: CardState, duration: TimeInterval) {
@@ -170,22 +139,61 @@ final class AttractionCollectionViewController: UICollectionViewController {
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
         }
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return attractions.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttractionCollectionViewCell", for: indexPath) as? AttractionCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        let attraction = attractions[indexPath.row]
+        
+        retrieveImage(urlString: attraction.image) { (image) in
+            cell.viewModel = AttractionCollectionViewCell.ViewModel(name: attraction.name, image: image, description: attraction.description)
+        }
+        
+        return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedAttraction = attractions[indexPath.row]
+        
+        retrieveImage(urlString: selectedAttraction.image) { [weak self] (image) in
+            self?.cardViewController.viewModel = CardViewController.ViewModel(name: selectedAttraction.name, description: selectedAttraction.description, image: image)
+        }
+        
+        visualEffectsView = UIVisualEffectView()
+        visualEffectsView.frame = view.frame
+        view.addSubview(visualEffectsView)
+        
+        addChild(cardViewController)
+        view.addSubview(cardViewController.view)
+        
+        cardViewController.view.frame = CGRect(x: 0, y: view.frame.height, width: view.bounds.width, height: cardHeight)
+        cardViewController.view.clipsToBounds = true
+        
+        animateTransitionIfNeeded(state: nextState, duration: 1.0)
+    }
 }
-    extension AttractionCollectionViewController: CardViewControllerDelegate {
+
+extension AttractionCollectionViewController: CardViewControllerDelegate {
+    
+    func panGestureDidBegin(_ cardViewController: CardViewController) {
+        startIntractiveTransition(state: nextState, duration: 1.0)
+    }
+    
+    func panGestureDidChange(_ cardViewController: CardViewController, with translation: CGPoint) {
+        var fractionComplete = translation.y / cardHeight
         
-        func panGestureDidBegin(_ cardViewController: CardViewController) {
-            startIntractiveTransition(state: nextState, duration: 1.0)
-        }
-        
-        func panGestureDidChange(_ cardViewController: CardViewController, with translation: CGPoint) {
-            var fractionComplete = translation.y / cardHeight
-            
-            fractionComplete = isCardVisible ? fractionComplete : -fractionComplete
-            updateInteractiveTransition(fractionCompleted: fractionComplete)
-        }
-        
-        func panGestureDidEnd(_ cardViewController: CardViewController) {
-            continueInteractionTransition()
-            visualEffectsView.isHidden = true
-        }
+        fractionComplete = isCardVisible ? fractionComplete : -fractionComplete
+        updateInteractiveTransition(fractionCompleted: fractionComplete)
+    }
+    
+    func panGestureDidEnd(_ cardViewController: CardViewController) {
+        continueInteractionTransition()
+        visualEffectsView.isHidden = true
+    }
 }
+
