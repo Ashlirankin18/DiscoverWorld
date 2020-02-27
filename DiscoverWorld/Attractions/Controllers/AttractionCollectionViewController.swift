@@ -26,7 +26,7 @@ final class AttractionCollectionViewController: UICollectionViewController {
     
     private var visualEffectsView: UIVisualEffectView!
     
-    private lazy var cardViewController: CardViewController = .init(attraction: attractions[0], imageLoader: imageLoader, delegate: self)
+    private lazy var cardViewController: CardViewController = .init(delegate: self)
     
     private var runningAnimations = [UIViewPropertyAnimator]()
     
@@ -40,6 +40,10 @@ final class AttractionCollectionViewController: UICollectionViewController {
     
     @IBOutlet private weak var flowLayout: UICollectionViewFlowLayout!
     
+    /// Creates a new instance of `AttractionCollectionViewContoroller`
+    /// - Parameters:
+    ///   - attractions: The attractions that a country has.
+    ///   - imageLoader: Responsible for retrieving images.
     init(attractions: [Attraction], imageLoader: ImageLoader) {
         self.attractions = attractions
         self.imageLoader = imageLoader
@@ -60,88 +64,62 @@ final class AttractionCollectionViewController: UICollectionViewController {
         collectionView.register(UINib(nibName: "AttractionCollectionViewCell", bundle: Bundle.main), forCellWithReuseIdentifier: "AttractionCollectionViewCell")
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return attractions.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttractionCollectionViewCell", for: indexPath) as? AttractionCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        let attraction = attractions[indexPath.row]
-        imageLoader.retrieveImage(urlString: attraction.image) { (result) in
+    private func retrieveImage(urlString: String, completion: @escaping (UIImage) -> Void) {
+        imageLoader.retrieveImage(urlString: urlString) { (result) in
             switch result {
             case let .failure(error):
                 print(error)
-                cell.viewModel = AttractionCollectionViewCell.ViewModel(name: attraction.name, image: UIImage(systemName: "lock.slash.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40.0, weight: .heavy, scale: .large)) ?? UIImage(), description: attraction.description)
             case let .success(image):
-                cell.viewModel = AttractionCollectionViewCell.ViewModel(name: attraction.name, image: image, description: attraction.description)
+                completion(image)
             }
         }
-        
-        return cell
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        visualEffectsView = UIVisualEffectView()
-        visualEffectsView.frame = view.frame
-        view.addSubview(visualEffectsView)
-        
-        addChild(cardViewController)
-        view.addSubview(cardViewController.view)
-        
-        cardViewController.view.frame = CGRect(x: 0, y: view.frame.height, width: view.bounds.width, height: cardHeight)
-        cardViewController.view.clipsToBounds = true
-        
-        animateTransitionIfNeeded(state: nextState, duration: 1.0)
     }
     
     private func animateTransitionIfNeeded(state: CardState, duration: TimeInterval) {
-      if runningAnimations.isEmpty {
-        let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
-            switch state {
-            case .expanded:
-                self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
-            case .collapsed:
-                self.cardViewController.view.frame.origin.y = self.view.frame.height
+        if runningAnimations.isEmpty {
+            let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+                switch state {
+                case .expanded:
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
+                case .collapsed:
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height
+                }
             }
-        }
-        frameAnimator.addCompletion { _ in
-            self.isCardVisible = !self.isCardVisible
-            self.runningAnimations.removeAll()
-        }
-        frameAnimator.startAnimation()
-        runningAnimations.append(frameAnimator)
-        
-        let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
-            switch state {
-            case .expanded:
-                self.cardViewController.view.layer.cornerRadius = 12.0
-            case .collapsed:
-                self.cardViewController.view.layer.cornerRadius = 0
+            frameAnimator.addCompletion { _ in
+                self.isCardVisible = !self.isCardVisible
+                self.runningAnimations.removeAll()
             }
-        }
-        cornerRadiusAnimator.startAnimation()
-        runningAnimations.append(cornerRadiusAnimator)
-        
-        let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1.0 ) {
-            switch state {
-            case .expanded:
-                self.visualEffectsView.effect = UIBlurEffect(style: .regular)
-            case .collapsed:
-                self.visualEffectsView.effect = nil
+            frameAnimator.startAnimation()
+            runningAnimations.append(frameAnimator)
+            
+            let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
+                switch state {
+                case .expanded:
+                    self.cardViewController.view.layer.cornerRadius = 10.0
+                case .collapsed:
+                    self.cardViewController.view.layer.cornerRadius = 0
+                }
             }
+            cornerRadiusAnimator.startAnimation()
+            runningAnimations.append(cornerRadiusAnimator)
+            
+            let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1.0 ) {
+                switch state {
+                case .expanded:
+                    self.visualEffectsView.effect = UIBlurEffect(style: .regular)
+                case .collapsed:
+                    self.visualEffectsView.effect = nil
+                }
+            }
+            blurAnimator.startAnimation()
+            runningAnimations.append(blurAnimator)
         }
-        blurAnimator.startAnimation()
-        runningAnimations.append(blurAnimator)
     }
-}
     
     private func startIntractiveTransition(state: CardState, duration: TimeInterval) {
-       
+        
         if runningAnimations.isEmpty {
-          animateTransitionIfNeeded(state: state, duration: duration)
+            animateTransitionIfNeeded(state: state, duration: duration)
         }
         
         for animator in runningAnimations {
@@ -157,9 +135,46 @@ final class AttractionCollectionViewController: UICollectionViewController {
     }
     
     private func continueInteractionTransition() {
-       for animator in runningAnimations {
-        animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
+        for animator in runningAnimations {
+            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
         }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return attractions.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttractionCollectionViewCell", for: indexPath) as? AttractionCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        let attraction = attractions[indexPath.row]
+        
+        retrieveImage(urlString: attraction.image) { (image) in
+            cell.viewModel = AttractionCollectionViewCell.ViewModel(name: attraction.name, image: image, description: attraction.description)
+        }
+        
+        return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedAttraction = attractions[indexPath.row]
+        
+        retrieveImage(urlString: selectedAttraction.image) { [weak self] (image) in
+            self?.cardViewController.viewModel = CardViewController.ViewModel(name: selectedAttraction.name, description: selectedAttraction.description, image: image)
+        }
+        
+        visualEffectsView = UIVisualEffectView()
+        visualEffectsView.frame = view.frame
+        view.addSubview(visualEffectsView)
+        
+        addChild(cardViewController)
+        view.addSubview(cardViewController.view)
+        
+        cardViewController.view.frame = CGRect(x: 0, y: view.frame.height, width: view.bounds.width, height: cardHeight)
+        cardViewController.view.clipsToBounds = true
+        
+        animateTransitionIfNeeded(state: nextState, duration: 1.0)
     }
 }
 

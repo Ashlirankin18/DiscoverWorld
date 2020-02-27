@@ -29,15 +29,43 @@ protocol CardViewControllerDelegate: AnyObject {
 /// `UIViewController` subclass which displays details about an attraction.
 final class CardViewController: UIViewController {
     
+    struct ViewModel {
+        
+        /// The name of the attraction.
+        let name: String
+        
+        /// The attraction's description.
+        let description: String
+        
+        /// The  attractions image
+        let image: UIImage
+    }
+    
     @IBOutlet private weak var handleAreaView: UIView!
     
-    private let attraction: Attraction
-    private let imageLoader: ImageLoader
+    @IBOutlet private weak var attractionImageView: UIImageView!
+    
+    @IBOutlet private weak var attractionNameLabel: UILabel!
+    
+    @IBOutlet private weak var attractionDescriptionTextView: UITextView!
     
     private lazy var panGestureRecognizer: UIPanGestureRecognizer = .init(target: self, action: #selector(handleCardPan(panGestureRecognizer:)))
     
     /// Notifies subscriber to pan gesture recognizer changes.
-    weak var delegate: CardViewControllerDelegate?
+    private weak var delegate: CardViewControllerDelegate?
+    
+    /// Single point of configuration of the `CardViewController`.
+    var viewModel: ViewModel? {
+        didSet {
+            guard let viewModel = viewModel else {
+                return
+            }
+            attractionImageView.layer.cornerRadius = 5.0
+            attractionImageView.image = viewModel.image
+            attractionNameLabel.text = viewModel.name
+            attractionDescriptionTextView.text = viewModel.description
+        }
+    }
     
     // MARK: - CardViewController
     
@@ -45,9 +73,7 @@ final class CardViewController: UIViewController {
     /// - Parameters:
     ///   - attraction: A country's attraction.
     ///   - imageLoader: Loads the image from a URL.
-    init(attraction: Attraction, imageLoader: ImageLoader, delegate: CardViewControllerDelegate?) {
-        self.attraction = attraction
-        self.imageLoader = imageLoader
+    init(delegate: CardViewControllerDelegate?) {
         self.delegate = delegate
         super.init(nibName: "CardViewController", bundle: nil)
     }
@@ -56,6 +82,7 @@ final class CardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         handleAreaView.addGestureRecognizer(panGestureRecognizer)
