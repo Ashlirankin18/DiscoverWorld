@@ -37,6 +37,7 @@ final class AttractionCollectionViewController: UICollectionViewController {
             collectionView.reloadData()
         }
     }
+    private lazy var tapGestureRecognizer: UITapGestureRecognizer = .init(target: self, action: #selector(handleTapGesture(tapGestureRecognizer:)))
     
     @IBOutlet private weak var flowLayout: UICollectionViewFlowLayout!
     
@@ -106,8 +107,11 @@ final class AttractionCollectionViewController: UICollectionViewController {
             let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1.0 ) {
                 switch state {
                 case .expanded:
+                     self.visualEffectsView.isHidden = false
                     self.visualEffectsView.effect = UIBlurEffect(style: .regular)
+                   
                 case .collapsed:
+                    self.visualEffectsView.isHidden = true
                     self.visualEffectsView.effect = nil
                 }
             }
@@ -167,7 +171,8 @@ final class AttractionCollectionViewController: UICollectionViewController {
         visualEffectsView = UIVisualEffectView()
         visualEffectsView.frame = view.frame
         view.addSubview(visualEffectsView)
-        
+        visualEffectsView.addGestureRecognizer(tapGestureRecognizer)
+        visualEffectsView.isUserInteractionEnabled = true
         addChild(cardViewController)
         view.addSubview(cardViewController.view)
         
@@ -176,9 +181,15 @@ final class AttractionCollectionViewController: UICollectionViewController {
         
         animateTransitionIfNeeded(state: nextState, duration: 1.0)
     }
+    
+    @objc private func handleTapGesture(tapGestureRecognizer: UITapGestureRecognizer) {
+        animateTransitionIfNeeded(state: nextState, duration: 1.0)
+    }
 }
 
 extension AttractionCollectionViewController: CardViewControllerDelegate {
+    
+    // MARK: - CardViewControllerDelegate
     
     func panGestureDidBegin(_ cardViewController: CardViewController) {
         startIntractiveTransition(state: nextState, duration: 1.0)
